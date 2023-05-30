@@ -1,83 +1,110 @@
-function displaytrack($track, $position) {
+# Function to set cursor position
+function Set-CursorPosition($left, $top) {
+    $host.UI.RawUI.CursorPosition = New-Object System.Management.Automation.Host.Coordinates -ArgumentList $left, $top
+}
+
+# Function to display the racetrack and player position
+function DisplayTrack($track) {
     cls
-    for($i=0;$i -lt $position; $i++) {
-        Write-Host -NoNewline " "
-    }
 
-    Write-Host -NoNewline "V"
-
-    forEach($row in $track) {
+    foreach ($row in $track) {
         Write-Output("$row")
     }
 }
 
-function getNewPosition($position) {
+function DisplayPlayer($position) {
+    Set-CursorPosition -Left $position -Top 0
+    Write-Output("V")
+}
+
+# Function to get the new player position based on user inputs
+function GetNewPosition($position) {
     do {
-        $key = [System.Console]::ReadKey($true)
-    } while (($key.key -ne "LeftArrow") -and ($key.key -ne "RightArrow"))
-    
-    if ($key.key -eq "LeftArrow") {
+        $key = [System.Console]::ReadKey($true).Key
+    } while (($key -ne "LeftArrow") -and ($key -ne "RightArrow"))
+
+    if ($key -eq "LeftArrow") {
         $position -= 1
-    } elseif ($key.key -eq "RightArrow") {
+    } elseif ($key -eq "RightArrow") {
         $position += 1
     }
 
     return $position
 }
 
-function checkBounds($position, $name) {
-    if (($position -lt 0) -or ($position -gt 5)) {
-        Write-Output("Game Over $name!")
+# Function to check if the player is within the bounds of the racetrack
+function CheckBounds($position, $name) {
+    if (($position -lt 0) -or ($position -gt $raceTrackWidth)) {
+        Write-Output "Game Over $name!"
         exit
     }
 }
 
-function racetrack($track) {
-    
-    $newtrack = @(
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", "")
+# Function to update the racetrack by shifting rows up
+function RaceTrack($track) {
+    $newTrack = @(
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+        @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
     )
-
-    for($i=0;$i -lt $newtrack.Length;$i++) {
-        if (($i+1) -lt $track.Length) {
-            $newtrack[$i] = $track[$i+1]
+    
+    for ($i = 0; $i -lt $newTrack.Length; $i++) {
+        # Copy the next row from the original track to the new track
+        if (($i + 1) -lt $track.Length) {
+            $newTrack[$i] = $track[$i + 1]
         }
     }
 
-    return $newtrack
+    return $newTrack
 }
 
-
-$track = @(
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "", ""),
-    @("", "", "", "-", ""),
-    @("", "-", "", "-", "")
-)
-
-$loop = $True
-$isAlive = $True
+# Global variables
+$loop = $true
+$isAlive = $true
 $position = 3
 $score = 1
+$raceTrackWidth = 15
+$raceTrackLength = 15
 
-$name = Read-Host("Enter Name")
+# Initialize racetrack and game variables
+$track = @(
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "-", "", "", "-", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "-", "", "", "-", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "-", "", "-", "", "", "", "")
+)
 
-While ($loop) {
-    displaytrack $track $position
-    $position = getNewPosition $position
-    $isAlive = checkBounds $position $name
-    $track = racetrack $track
+# Prompt the player to enter their name
+$name = Read-Host "Enter Name"
+
+# Main game loop
+while ($loop) {
+    DisplayTrack $track    # Display the racetrack
+    DisplayPlayer $position    # Display the player
+    $position = GetNewPosition $position    # Get the new player position
+    $isAlive = CheckBounds $position $name    # Check if the player is within bounds
+    $track = RaceTrack $track    # Update the racetrack
 }
