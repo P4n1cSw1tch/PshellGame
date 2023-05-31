@@ -101,18 +101,6 @@ function generateobstacles{
 
         $row[$Obstacle2] = "*"
 
-    $Obstacle3 = Get-Random -Minimum 0 -Maximum 29
-
-        $row[$Obstacle3] = "*"
-
-    $Obstacle4 = Get-Random -Minimum 0 -Maximum 29
-
-        $row[$Obstacle4] = "*"
-
-    $Obstacle5 = Get-Random -Minimum 0 -Maximum 29
-
-        $row[$Obstacle5] = "*"
-
     return $row
 
 }
@@ -123,7 +111,6 @@ $isAlive = $true
 $position = 3
 $score = 1
 $raceTrackWidth = 30
-$raceTrackLength = 16
 
 # Initialize racetrack and game variables
 $track = @(
@@ -141,7 +128,7 @@ $track = @(
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
-    @("", "", "", "", "", "", "", "", "", "", "", "", "*", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 )
 
 # Prompt the player to enter their name
@@ -154,7 +141,7 @@ while ($loop) {
     $row = generateobstacles
     $position = GetNewPosition $position    # Get the new player position
     $isAlive = CheckBounds $position $name $score    # Check if the player is within bounds
-    $isAlive = HitObstacle $track[0] $position $score $name
     $score += 1 
     $track = RaceTrack $track $row    # Update the racetrack
+    $isAlive = HitObstacle $track[0] $position $score $name
 }
