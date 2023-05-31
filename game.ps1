@@ -93,7 +93,7 @@ function RaceTrack($track, $row) {
 function generateobstacles {
     $row = @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
-    $Obstacle1 = Get-Random -Minimum 0 -Maximum 30
+    $Obstacle1 = Get-Random -Minimum 0 -Maximum 29
     $row[$Obstacle1] = "*"
 
     return $row
