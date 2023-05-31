@@ -95,11 +95,8 @@ function generateobstacles{
 
     $Obstacle1 = Get-Random -Minimum 0 -Maximum 29
 
-        $row[$Obstacle1] = "*"
- 
-    $Obstacle2 = Get-Random -Minimum 0 -Maximum 29
+     $row[$Obstacle1] = "*"
 
-        $row[$Obstacle2] = "*"
 
     return $row
 
