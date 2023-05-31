@@ -94,9 +94,10 @@ function generateobstacles{
    $row = @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
     $Obstacle1 = Get-Random -Minimum 0 -Maximum 29
+    $Obstacle2 = Get-Random -Minimum 0 -Maximum 29
 
      $row[$Obstacle1] = "*"
-
+     $row[$Obstacle2] = "*"
 
     return $row
 
@@ -105,7 +106,7 @@ function generateobstacles{
 # Global variables
 $loop = $true
 $isAlive = $true
-$position = 3
+$position = 15
 $score = 1
 $raceTrackWidth = 30
 
