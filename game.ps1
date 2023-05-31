@@ -25,7 +25,6 @@ function HitObstacle($row, $position, $score, $name) {
         clear
         Write-Output "Game Over $name!"
         Write-Output "Your Score Was $score!"
-        Write-Output "$position"
         exit
     }
 
@@ -91,7 +90,7 @@ function RaceTrack($track, $row) {
 }
 
 function generateobstacles {
-    $row = @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+    $row = @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
     $Obstacle1 = Get-Random -Minimum 0 -Maximum 29
     $row[$Obstacle1] = "*"
