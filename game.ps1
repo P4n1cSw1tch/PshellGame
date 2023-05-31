@@ -1,6 +1,3 @@
-Sure! Here's the code with comments added and some minor syntax corrections:
-
-```powershell
 # Function to set cursor position
 function Set-CursorPosition($left, $top) {
     $host.UI.RawUI.CursorPosition = New-Object System.Management.Automation.Host.Coordinates -ArgumentList $left, $top
