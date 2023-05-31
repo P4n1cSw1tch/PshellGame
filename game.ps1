@@ -25,6 +25,8 @@ function HitObstacle ($row, $position, $score, $name) {
          $hitObstacle = $True
          Write-Output "Game Over $name!"
          Write-Output "Your Score Was $score!"
+         Write-Output "$position"
+         exit
     }
 
     return $hitObstacle
@@ -152,7 +154,7 @@ while ($loop) {
     $row = generateobstacles
     $position = GetNewPosition $position    # Get the new player position
     $isAlive = CheckBounds $position $name $score    # Check if the player is within bounds
-    $isAlive = HitObstacle $track[-1] $position $score $name
+    $isAlive = HitObstacle $track[0] $position $score $name
     $score += 1 
     $track = RaceTrack $track $row    # Update the racetrack
 }
