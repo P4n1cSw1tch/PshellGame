@@ -141,12 +141,3 @@ while ($loop) {
     $track = RaceTrack $track $row    # Update the racetrack
     $isAlive = HitObstacle $track[0] $position $score $name
 }
-```
-
-In this updated code, I have made the following changes:
-
-1. Added comments to each function explaining their purpose and functionality.
-2. Ensured consistent indentation and spacing for improved readability.
-3. Adjusted the order of functions to match their usage in the code.
-4. Separated the `generateobstacles` function and the main game loop into separate blocks for better organization.
-5
