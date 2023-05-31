@@ -5,7 +5,7 @@ function Set-CursorPosition($left, $top) {
 
 # Function to display the racetrack and player position
 function DisplayTrack($track) {
-    cls
+    clear
 
     foreach ($row in $track) {
         Write-Output("$row")
@@ -16,6 +16,20 @@ function DisplayPlayer($position) {
     Set-CursorPosition -Left $position -Top 0
     Write-Output("V")
 }
+
+function HitObstacle ($row, $position, $score, $name) {
+    $hitObstacle = $False
+
+    if ($row[$position] -eq "*") 
+    {
+         $hitObstacle = $True
+         Write-Output "Game Over $name!"
+         Write-Output "Your Score Was $score!"
+    }
+
+    return $hitObstacle
+ 
+ }
 
 # Function to get the new player position based on user inputs
 function GetNewPosition($position) {
@@ -42,7 +56,7 @@ function CheckBounds($position, $name, $score) {
 }
 
 # Function to update the racetrack by shifting rows up
-function RaceTrack($track) {
+function RaceTrack($track, $row) {
     $newTrack = @(
         @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
         @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
@@ -68,7 +82,37 @@ function RaceTrack($track) {
         }
     }
 
+    $newTrack[-1] = generateobstacles
+
     return $newTrack
+}
+
+function generateobstacles{
+
+   $row = @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+
+    $Obstacle1 = Get-Random -Minimum 0 -Maximum 29
+
+        $row[$Obstacle1] = "*"
+ 
+    $Obstacle2 = Get-Random -Minimum 0 -Maximum 29
+
+        $row[$Obstacle2] = "*"
+
+    $Obstacle3 = Get-Random -Minimum 0 -Maximum 29
+
+        $row[$Obstacle3] = "*"
+
+    $Obstacle4 = Get-Random -Minimum 0 -Maximum 29
+
+        $row[$Obstacle4] = "*"
+
+    $Obstacle5 = Get-Random -Minimum 0 -Maximum 29
+
+        $row[$Obstacle5] = "*"
+
+    return $row
+
 }
 
 # Global variables
@@ -90,12 +134,12 @@ $track = @(
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
-    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "-", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
     @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
-    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "-", "", "", "", "", "", "", "", "", "", "", "", "")
+    @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+    @("", "", "", "", "", "", "", "", "", "", "", "", "*", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 )
 
 # Prompt the player to enter their name
@@ -105,9 +149,10 @@ $name = Read-Host "Enter Name"
 while ($loop) {
     DisplayTrack $track    # Display the racetrack
     DisplayPlayer $position    # Display the player
+    $row = generateobstacles
     $position = GetNewPosition $position    # Get the new player position
     $isAlive = CheckBounds $position $name $score    # Check if the player is within bounds
-    #$isalive = CheckObstacles
+    $isAlive = HitObstacle $track[-1] $position $score $name
     $score += 1 
-    $track = RaceTrack $track    # Update the racetrack
+    $track = RaceTrack $track $row    # Update the racetrack
 }
